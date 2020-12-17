@@ -19,22 +19,41 @@ const questions = [];
 function askUser () {
     inquirer.prompt([
         {
+            type: "input", 
+            message: "Name: ", 
+            name: "name"
+        }, 
+        {
             type: "input",
-            message: "ID: ",
-            name: "id"
+            message: "Email: ",
+            name: "email"
         }, 
         {
             type: "input", 
             message: "ID: ", 
             name: "id"
-        }, 
+        },
         {
-            type: "input", 
-            message: "ID: ", 
-            name: "id"
+            type: "list", 
+            message: "What employee type are you? ",
+            choices: ["Manager", "Engineer", "Intern"],
+            name: "organization"
+        },
+    ]).then((response) => {
+        if (response.organization === "Manager") {
+            inquirer.prompt([
+                {
+                    type: "input", 
+                    message: "What is your office number?", 
+                    name: "officeNumber"
+                }
+            ]).then((response) => {
+                questions.push(new Manager(response.name, response.email, response.id, response.officeNumber));
+                mainInquirer();
+            });
         }
-    ])
-}
+    });
+};
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -45,6 +64,8 @@ function askUser () {
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
+
+askUser();
 
 // HINT: each employee type (manager, engineer, or intern) has slightly different
 // information; write your code to ask different questions via inquirer depending on
