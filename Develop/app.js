@@ -31,6 +31,11 @@ const managerarray = [
         message: "ID: ",
         name: "id"
     },
+    {
+        type: "input",
+        message: "Office Number: ",
+        name: "officeNumber"
+    }
 ];
 const engineerarray = [
     {
@@ -80,7 +85,7 @@ function askUser() {
             type: "confirm",
             message: "Add another employee?",
             name: "continue",
-            default: false,
+            default: true,
         },
     ]).then(function (response) {
         if (response.continue === true && response.organization === "Manager") {
@@ -94,7 +99,10 @@ function askUser() {
 };
 
 function managerInquirer() {
-    inquirer.prompt(managerarray).then()
+    inquirer.prompt(managerarray).then(function(response) {
+        const managerList = new Manager(response.name, response.id, response.email, response.officeNumber)
+        questions.push(managerList);
+    })
 }
 
 // After the user has input all employees desired, call the `render` function (required
