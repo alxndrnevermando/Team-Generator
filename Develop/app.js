@@ -49,7 +49,6 @@ function askUser () {
                 }
             ]).then((response) => {
                 questions.push(new Manager(response.name, response.email, response.id, response.officeNumber));
-                //mainInquirer();
             });
         }
     });
