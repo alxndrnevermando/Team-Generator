@@ -15,52 +15,108 @@ const render = require("./lib/htmlRenderer");
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 const questions = [];
+const managerarray = [
+    {
+        type: "input",
+        message: "Name: ",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Email: ",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "ID: ",
+        name: "id"
+    },
+];
+const engineerarray = [
+    {
+        type: "input",
+        message: "Name: ",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Email: ",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "ID: ",
+        name: "id"
+    },
+];
+const internsarray = [
+    {
+        type: "input",
+        message: "Name: ",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Email: ",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "ID: ",
+        name: "id"
+    },
+];
 
-function askUser () {
+
+function askUser() {
     inquirer.prompt([
         {
-            type: "input", 
-            message: "Name: ", 
-            name: "name"
-        }, 
-        {
-            type: "input",
-            message: "Email: ",
-            name: "email"
-        }, 
-        {
-            type: "input", 
-            message: "ID: ", 
-            name: "id"
-        },
-        {
-            type: "list", 
+            type: "list",
             message: "What employee type are you? ",
             choices: ["Manager", "Engineer", "Intern"],
             name: "organization"
         },
-    ]).then((response) => {
-        if (response.organization === "Manager") {
-            inquirer.prompt([
-                {
-                    type: "input", 
-                    message: "What is your office number?", 
-                    name: "officeNumber"
-                }
-            ]).then((response) => {
-                questions.push(new Manager(response.name, response.email, response.id, response.officeNumber));
-            });
+        {
+            type: "confirm",
+            message: "Add another employee?",
+            name: "continue",
+            default: false,
+        },
+    ]).then(function (response) {
+        if (response.continue === true && response.organization === "Manager") {
+            managerInquirer();
         }
+        else {
+            init();
+        }
+
     });
 };
+
+function managerInquirer() {
+    inquirer.prompt(managerarray).then()
+}
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
-
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
 // `output` folder. You can use the variable `outputPath` above target this location.
+
+function init() {
+    inquirer
+    // Use user feedback for... whatever!!
+    const response = render(questions);
+    fs.writeFile(outputPath, response, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("SUCCESS!")
+        }
+    });
+}
+
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
 
