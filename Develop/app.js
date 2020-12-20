@@ -53,6 +53,11 @@ const engineerarray = [
         message: "ID: ",
         name: "id"
     },
+    {
+        type: "input",
+        message: "Github: ",
+        name: "github"
+    }
 ];
 const internsarray = [
     {
@@ -70,26 +75,37 @@ const internsarray = [
         message: "ID: ",
         name: "id"
     },
+    {
+        type: "input",
+        message: "School: ",
+        name: "school"
+    }
 ];
 
 
 function askUser() {
     inquirer.prompt([
         {
+            type: "confirm",
+            message: "Add an employee?",
+            name: "continue",
+            default: true,
+        },
+        {
             type: "list",
             message: "What employee type are you? ",
             choices: ["Manager", "Engineer", "Intern"],
             name: "organization"
-        },
-        {
-            type: "confirm",
-            message: "Add another employee?",
-            name: "continue",
-            default: true,
-        },
+        }
     ]).then(function (response) {
         if (response.continue === true && response.organization === "Manager") {
             managerInquirer();
+        }
+        else if (response.continue === true && response.organization === "Engineer") {
+            engineerInquirer();
+        }
+        else if (response.continue === true && response.organization === "Intern") {
+            internInquirer();
         }
         else {
             init();
@@ -100,10 +116,27 @@ function askUser() {
 
 function managerInquirer() {
     inquirer.prompt(managerarray).then(function(response) {
-        const managerList = new Manager(response.name, response.id, response.email, response.officeNumber)
+        const managerList = new Manager(response.name, response.id, response.email, response.officeNumber);
         questions.push(managerList);
+        askUser();
     })
-}
+};
+
+function engineerInquirer() {
+    inquirer.prompt(engineerarray).then(function(response) {
+        const engineerList = new Engineer(response.name, response.id, response.email, response.githu);
+        questions.push(engineerList);
+        askUser();
+    })
+};
+
+function internInquirer() {
+    inquirer.prompt(internsarray).then(function(response) {
+        const internList = new Intern(response.name, response.id, response.email, response.school);
+        questions.push(internList);
+        askUser();
+    })
+};
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -113,10 +146,9 @@ function managerInquirer() {
 // `output` folder. You can use the variable `outputPath` above target this location.
 
 function init() {
-    inquirer
     // Use user feedback for... whatever!!
-    const response = render(questions);
-    fs.writeFile(outputPath, response, (err) => {
+    const outputHTML = render(questions);
+    fs.writeFile(outputPath, outputHTML, (err) => {
         if (err) {
             console.log(err);
         } else {
